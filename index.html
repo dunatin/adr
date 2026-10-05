@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADR Quest | Learn. Detect. Report. Save Lives.</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for fallback medical/dashboard icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader-spinner"></div>
+        <h2 style="font-family: 'Outfit', sans-serif;">Loading ADR Quest...</h2>
+        <p style="color: var(--text-muted);">Preparing clinical learning simulation</p>
+    </div>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="nav-container">
+            <div class="logo" onclick="navigateTo('landing')">
+                <i class="fa-solid fa-laptop-medical logo-icon"></i>
+                <span>ADR Quest</span>
+            </div>
+            
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><span class="nav-link active" onclick="navigateTo('landing')">Home</span></li>
+                    <li><span class="nav-link" onclick="navigateTo('dashboard')">Dashboard</span></li>
+                    <li><span class="nav-link" onclick="navigateTo('learning')">Learning</span></li>
+                    <li><span class="nav-link" onclick="navigateTo('simulator')">Simulator</span></li>
+                    <li><span class="nav-link" onclick="navigateTo('games')">Games</span></li>
+                    <li><span class="nav-link" onclick="navigateTo('reporting')">Report Practice</span></li>
+                    <li><span class="nav-link" onclick="navigateTo('progress')">Analytics</span></li>
+                    <li><span class="nav-link" onclick="navigateTo('leaderboard')">Leaderboard</span></li>
+                    <li><span class="nav-link" id="admin-nav-link" style="display: none; color: var(--accent);" onclick="navigateTo('admin')">Admin</span></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="btn btn-outline btn-sm" id="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <div id="auth-nav-buttons">
+                    <button class="btn btn-outline btn-sm" onclick="navigateTo('auth-login')">Login</button>
+                    <button class="btn btn-primary btn-sm" onclick="navigateTo('auth-register')">Register</button>
+                </div>
+                <div id="user-nav-profile" style="display: none;" class="nav-actions">
+                    <span style="font-weight: 600; color: var(--secondary);" id="nav-user-xp">0 XP</span>
+                    <div style="cursor: pointer; display: flex; align-items: center; gap: 0.5rem;" onclick="navigateTo('profile')">
+                        <span id="nav-user-avatar" style="font-size: 1.5rem;">👨‍⚕️</span>
+                        <span id="nav-user-name" style="font-weight: 600; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Dr. Guest</span>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="logoutUser()" title="Logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+                <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- 1. LANDING PAGE VIEW -->
+        <section id="landing" class="view-section active-view">
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-text">
+                    <h1>Learn. Detect. Report.<br><span style="color: var(--secondary);">Save Lives.</span></h1>
+                    <p>ADR Quest is a premium healthcare EdTech simulator designed to master Adverse Drug Reaction identification, analysis, and clinical safety reporting. Turn critical skills into life-saving habits.</p>
+                    <div class="hero-cta">
+                        <button class="btn btn-primary" onclick="navigateTo('auth-register')">Get Started Free <i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="btn btn-outline" onclick="scrollToAbout()">Learn More</button>
+                    </div>
+                </div>
+                <div class="hero-graphic">
+                    <svg viewBox="0 0 500 400" width="100%" class="medical-illustration" style="background: linear-gradient(135deg, rgba(30,58,138,0.05), rgba(13,148,136,0.05)); border: 1px solid var(--border-color);">
+                        <!-- Heartbeat monitor grid lines -->
+                        <path d="M 0,200 L 120,200 L 140,150 L 160,280 L 180,180 L 200,210 L 220,200 L 350,200 L 370,100 L 390,300 L 410,180 L 430,220 L 450,200 L 500,200" fill="none" stroke="var(--secondary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="370" cy="100" r="6" fill="var(--accent)" />
+                        <!-- Shield outline -->
+                        <path d="M 200,80 Q 250,60 300,80 Q 300,160 250,220 Q 200,160 200,80 Z" fill="none" stroke="var(--primary)" stroke-width="4" stroke-dasharray="5 5"/>
+                        <i class="fa-solid fa-shield-halved" style="font-size: 40px; color: var(--primary); transform: translate(230px, 110px);"></i>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <h3 id="stat-clinicians">14,200+</h3>
+                    <p>Trained Clinicians</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="stat-reports">48,900+</h3>
+                    <p>Mock ADRs Submitted</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="stat-accuracy">98.4%</h3>
+                    <p>Clinical Detection Rate</p>
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div id="about-section" class="landing-section">
+                <div class="section-header">
+                    <h2>Empowering Patients & Providers</h2>
+                    <p>Adverse Drug Reactions constitute a leading cause of hospitalization and death globally. ADR Quest provides a gamified, safe environment for mastering the clinical skills required to detect and document drug toxicities.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="glass-card feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <h3>Interactive Modules</h3>
+                        <p>Progress through 8 medical learning chapters starting from basic pharmacovigilance to critical toxicity scenarios.</p>
+                    </div>
+                    <div class="glass-card feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-stethoscope"></i></div>
+                        <h3>Clinical Simulator</h3>
+                        <p>Make real-time decisions on patient vital changes caused by medication errors and adverse reactions.</p>
+                    </div>
+                    <div class="glass-card feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-gamepad"></i></div>
+                        <h3>Serious Games</h3>
+                        <p>Test knowledge with dynamic mini-games: Quiz Battles, Drug Matching cards, True/False speedruns, and detective investigations.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step by Step Workflow -->
+            <div class="landing-section" style="background: rgba(226, 232, 240, 0.25); border-radius: var(--radius-lg);">
+                <div class="section-header">
+                    <h2>The Learning Workflow</h2>
+                    <p>Four simple stages designed to turn theory into certified safety management competencies.</p>
+                </div>
+                <div class="workflow-steps">
+                    <div class="glass-card step-card">
+                        <div class="step-num">1</div>
+                        <h4 style="margin-top: 1rem;">Absorb Lessons</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem;">Review cases, clinical pharmacology guides, and drug safety standards.</p>
+                    </div>
+                    <div class="glass-card step-card">
+                        <div class="step-num">2</div>
+                        <h4 style="margin-top: 1rem;">Simulate Decisions</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem;">Interact with clinical mock patients showing toxicity signs and monitor vitals.</p>
+                    </div>
+                    <div class="glass-card step-card">
+                        <div class="step-num">3</div>
+                        <h4 style="margin-top: 1rem;">Mock Reports</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem;">Practice documentation using standard reporting formats (FDA/yellow cards).</p>
+                    </div>
+                    <div class="glass-card step-card">
+                        <div class="step-num">4</div>
+                        <h4 style="margin-top: 1rem;">Earn Credentials</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem;">Achieve 100% on modules and download your official ADR Quest safety badge.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="landing-section">
+                <div class="section-header">
+                    <h2>Clinician Testimonials</h2>
+                    <p>Loved by medical students, pharmacists, and practitioners globally.</p>
+                </div>
+                <div class="testimonials-slider">
+                    <div class="glass-card testimonial-card">
+                        <p>"As a clinical pharmacist, identifying rare drug side effects quickly is critical. ADR Quest's simulator was both engaging and scientifically accurate."</p>
+                        <div class="testimonial-author">
+                            <div class="author-img" style="display:flex;align-items:center;justify-content:center;font-size:1.5rem;">👩‍⚕️</div>
+                            <div>
+                                <h4 style="font-size:0.95rem;">Sarah Jenkins, PharmD</h4>
+                                <p style="font-size:0.75rem;color:var(--text-muted);">Senior Clinical Pharmacist</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card testimonial-card">
+                        <p>"The reporting practices helped me learn how to write high-quality FDA MedWatch notes. This should be mandatory in medical school curricula!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-img" style="display:flex;align-items:center;justify-content:center;font-size:1.5rem;">👨‍⚕️</div>
+                            <div>
+                                <h4 style="font-size:0.95rem;">Dr. David Chen</h4>
+                                <p style="font-size:0.75rem;color:var(--text-muted);">Emergency Medicine Resident</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="landing-section">
+                <div class="section-header">
+                    <h2>Frequently Asked Questions</h2>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">Who is ADR Quest for? <i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>It is designed for medical, pharmacy, and nursing students, clinical staff, and patients wanting to learn about drug safety, pharmacovigilance, and adverse reaction report procedures.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">Is there a certificate awarded? <i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>Yes, completing all 8 learning modules and getting a passing grade on the final evaluations unlocks a downloadable, print-friendly clinical certificate of completion.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="landing-section" style="border-top: 1px solid var(--border-color);">
+                <div class="section-header">
+                    <h2>Get in Touch</h2>
+                    <p>Have recommendations or questions? Reach out to the ADR Quest team.</p>
+                </div>
+                <div class="glass-card" style="max-width: 600px; margin: 0 auto; padding: 2.5rem;">
+                    <form id="contact-form" onsubmit="handleContactSubmit(event)">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea class="form-control" rows="4" placeholder="Your comments..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. AUTHENTICATION UI -->
+        <!-- Login -->
+        <section id="auth-login" class="view-section">
+            <div class="auth-wrapper">
+                <div class="glass-card auth-container">
+                    <div class="auth-header">
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to resume your ADR clinical learning</p>
+                    </div>
+                    <form id="login-form" onsubmit="handleLoginSubmit(event)" novalidate>
+                        <div class="form-group">
+                            <label for="login-email">Email Address</label>
+                            <input type="email" id="login-email" class="form-control" placeholder="doctor@hospital.com">
+                            <div class="form-feedback" id="login-email-err">Enter a valid email address</div>
+                        </div>
+                        <div class="form-group">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <label for="login-password">Password</label>
+                                <span style="font-size:0.75rem; color:var(--primary); cursor:pointer;" onclick="navigateTo('auth-forgot')">Forgot Password?</span>
+                            </div>
+                            <input type="password" id="login-password" class="form-control" placeholder="••••••••">
+                            <div class="form-feedback" id="login-password-err">Password must be at least 6 characters</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Login</button>
+                    </form>
+                    <p class="auth-footer-text">Don't have an account? <a onclick="navigateTo('auth-register')">Register here</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Register -->
+        <section id="auth-register" class="view-section">
+            <div class="auth-wrapper">
+                <div class="glass-card auth-container">
+                    <div class="auth-header">
+                        <h2>Create Account</h2>
+                        <p>Join clinical professionals learning drug safety</p>
+                    </div>
+                    <form id="register-form" onsubmit="handleRegisterSubmit(event)" novalidate>
+                        <div class="form-group">
+                            <label for="register-name">Full Name</label>
+                            <input type="text" id="register-name" class="form-control" placeholder="Dr. Jane Smith">
+                            <div class="form-feedback" id="register-name-err">Name is required</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email Address</label>
+                            <input type="email" id="register-email" class="form-control" placeholder="jane.smith@hospital.org">
+                            <div class="form-feedback" id="register-email-err">Please enter a valid email</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-role">Professional / Academic Role</label>
+                            <select id="register-role" class="form-control">
+                                <optgroup label="Student Categories">
+                                    <option value="Medical Student">Medical Student</option>
+                                    <option value="Pharmacy Student">Pharmacy Student</option>
+                                    <option value="Nursing Student">Nursing Student</option>
+                                    <option value="Dental Student">Dental Student</option>
+                                    <option value="Pharmacology Student">Pharmacology Student</option>
+                                    <option value="Public Health Student">Public Health Student</option>
+                                </optgroup>
+                                <optgroup label="Healthcare / Research Professionals">
+                                    <option value="Clinical Pharmacist">Clinical Pharmacist</option>
+                                    <option value="Medical Doctor">Medical Doctor</option>
+                                    <option value="Registered Nurse">Registered Nurse</option>
+                                    <option value="Pharmacovigilance Officer">Pharmacovigilance Officer</option>
+                                    <option value="Drug Safety Specialist">Drug Safety Specialist</option>
+                                    <option value="Clinical Researcher">Clinical Researcher</option>
+                                </optgroup>
+                                <optgroup label="Other Categories">
+                                    <option value="Patient/Researcher">Patient/Researcher</option>
+                                    <option value="Admin">Administrator</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Password</label>
+                            <input type="password" id="register-password" class="form-control" placeholder="••••••••">
+                            <div class="form-feedback" id="register-password-err">Password must be at least 6 characters</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm">Confirm Password</label>
+                            <input type="password" id="register-confirm" class="form-control" placeholder="••••••••">
+                            <div class="form-feedback" id="register-confirm-err">Passwords do not match</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Create Account</button>
+                    </form>
+                    <p class="auth-footer-text">Already registered? <a onclick="navigateTo('auth-login')">Sign in here</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Forgot Password -->
+        <section id="auth-forgot" class="view-section">
+            <div class="auth-wrapper">
+                <div class="glass-card auth-container">
+                    <div class="auth-header">
+                        <h2>Recover Password</h2>
+                        <p>We'll send recovery credentials to your email</p>
+                    </div>
+                    <form id="forgot-form" onsubmit="handleForgotSubmit(event)" novalidate>
+                        <div class="form-group">
+                            <label for="forgot-email">Email Address</label>
+                            <input type="email" id="forgot-email" class="form-control" placeholder="jane.smith@hospital.org">
+                            <div class="form-feedback" id="forgot-email-err">Please enter a valid email</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Reset Password</button>
+                    </form>
+                    <p class="auth-footer-text"><a onclick="navigateTo('auth-login')">Back to login</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. USER DASHBOARD VIEW -->
+        <section id="dashboard" class="view-section">
+            <div class="dashboard-container">
+                <div>
+                    <!-- Welcome Banner -->
+                    <div class="welcome-banner">
+                        <div>
+                            <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Welcome back, <span id="dash-username">User</span>!</h2>
+                            <p>Master drug safety. Check your progress and attempt today's clinical challenges.</p>
+                        </div>
+                        <div class="welcome-stats">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.1rem; font-weight: 500; opacity: 0.9;">Knowledge Score</div>
+                                <div style="font-size: 2rem; font-weight: 800;" id="dash-knowledge-score">0%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Cards Grid -->
+                    <div class="dashboard-card-grid">
+                        <div class="glass-card dash-card">
+                            <h3>Quest Status</h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <div>
+                                    <span style="font-size: 0.875rem; color: var(--text-muted);">Current Level</span>
+                                    <h4 style="font-size: 1.8rem;" id="dash-level">Level 1</h4>
+                                </div>
+                                <div style="text-align: right;">
+                                    <span style="font-size: 0.875rem; color: var(--text-muted);">Total XP</span>
+                                    <h4 style="font-size: 1.8rem; color: var(--primary);" id="dash-xp">0 XP</h4>
+                                </div>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fg" id="dash-xp-progress" style="width: 0%;"></div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; text-align: right;" id="dash-xp-needed">100 XP to Level 2</div>
+                        </div>
+
+                        <div class="glass-card dash-card">
+                            <h3>Daily Streak</h3>
+                            <div class="streak-counter">
+                                <i class="fa-solid fa-fire animate-bounce"></i>
+                                <span id="dash-streak">1 Day Streak</span>
+                            </div>
+                            <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem;">Maintain your streak by logging in daily and answering safety challenges.</p>
+                        </div>
+                    </div>
+
+                    <!-- Continue Learning Card -->
+                    <div class="glass-card" style="padding: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; gap: 2rem; background: linear-gradient(135deg, rgba(13,148,136,0.02), rgba(30,58,138,0.03)); border-left: 5px solid var(--secondary);">
+                        <div>
+                            <span style="font-size:0.75rem; font-weight:700; color:var(--secondary); text-transform:uppercase; letter-spacing:0.05em;">Recommended Module</span>
+                            <h3 style="font-size: 1.5rem; margin: 0.25rem 0 0.5rem;" id="dash-continue-module-title">1. Introduction to Pharmacovigilance</h3>
+                            <p style="font-size: 0.875rem; color: var(--text-muted);">Complete lessons and score 80% on the quiz to unlock the next levels.</p>
+                        </div>
+                        <button class="btn btn-secondary" onclick="navigateTo('learning')">Continue <i class="fa-solid fa-play"></i></button>
+                    </div>
+
+                    <!-- Today's Daily Lesson Card -->
+                    <div class="glass-card" style="padding: 2.5rem; margin-bottom: 2rem; border-left: 5px solid var(--primary);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                            <h3><i class="fa-solid fa-graduation-cap" style="color:var(--primary);"></i> Today's Daily Lesson</h3>
+                            <span id="daily-lesson-date-badge" style="padding:0.25rem 0.75rem; border-radius:var(--radius-sm); font-size:0.75rem; font-weight:700; background:rgba(59,130,246,0.1); color:var(--primary); text-transform:uppercase;">Date</span>
+                        </div>
+                        <div id="daily-lesson-panel">
+                            <h4 id="daily-lesson-title" style="font-size:1.4rem; margin-bottom:0.75rem; color:var(--text-main);">Loading today's lesson...</h4>
+                            <p id="daily-lesson-desc" style="font-size:0.95rem; color:var(--text-muted); margin-bottom:1.25rem; font-style:italic;"></p>
+                            <div id="daily-lesson-content" style="font-size:1rem; line-height:1.6; margin-bottom:1.5rem; background:rgba(0,0,0,0.15); padding:1.25rem; border-radius:var(--radius-md); border:1px dashed var(--border-color); display:none;">
+                                <!-- Expandable content -->
+                            </div>
+                            <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center; margin-bottom:1.5rem;">
+                                <button class="btn btn-outline btn-sm" id="daily-lesson-expand-btn" onclick="toggleDailyLessonExpand()">Read Lesson Content <i class="fa-solid fa-chevron-down"></i></button>
+                                <button class="btn btn-primary btn-sm" id="daily-lesson-complete-btn" onclick="markDailyLessonComplete()">Mark as Completed <i class="fa-solid fa-circle-check"></i></button>
+                                <span id="daily-lesson-video-link-container"></span>
+                            </div>
+                        </div>
+
+                        <!-- Previous Lessons Collapsible -->
+                        <div style="margin-top:1.5rem; border-top: 1px solid var(--border-color); padding-top:1.25rem;">
+                            <span style="font-size:0.875rem; font-weight:700; color:var(--text-muted); cursor:pointer;" onclick="togglePreviousLessonsList()"><i class="fa-solid fa-clock-rotate-left"></i> Access Previous Released Lessons <i class="fa-solid fa-chevron-down" id="prev-lessons-arrow" style="margin-left:0.25rem; font-size:0.75rem;"></i></span>
+                            <div id="previous-lessons-list" style="display:none; margin-top:1rem; display:flex; flex-direction:column; gap:0.75rem;">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Challenge -->
+                    <div class="glass-card" style="padding: 2.5rem; margin-bottom: 2rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                            <h3><i class="fa-solid fa-calendar-day" style="color:var(--accent);"></i> Today's Daily Challenge</h3>
+                            <span style="padding:0.25rem 0.75rem; border-radius:var(--radius-sm); font-size:0.75rem; font-weight:700; background:rgba(245,158,11,0.1); color:var(--accent);">+50 XP</span>
+                        </div>
+                        <div id="daily-challenge-panel">
+                            <h4 id="daily-question" style="font-size:1.15rem; margin-bottom:1rem;">Loading daily pharmacology challenge question...</h4>
+                            <div class="quiz-options" id="daily-options">
+                                <!-- Loaded dynamically -->
+                            </div>
+                            <div id="daily-feedback-panel" style="margin-top:1.5rem; display:none; padding:1.25rem; border-radius:var(--radius-md);">
+                                <h4 id="daily-feedback-title" style="margin-bottom:0.5rem;">Result</h4>
+                                <p id="daily-feedback-desc" style="font-size:0.95rem;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Sidebar Widgets -->
+                <div class="dash-sidebar">
+                    <!-- Achievements Panel -->
+                    <div class="glass-card" style="padding: 1.5rem;">
+                        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-award" style="color:var(--accent);"></i> Badges & Medals</h3>
+                        <div class="badge-showcase" id="dashboard-badges">
+                            <!-- Populated in JS -->
+                        </div>
+                        <button class="btn btn-outline btn-sm" style="width: 100%; margin-top: 1.5rem;" onclick="navigateTo('profile')">View Settings</button>
+                    </div>
+
+                    <!-- Notification Panel -->
+                    <div class="glass-card" style="padding: 1.5rem;">
+                        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-bell" style="color:var(--primary);"></i> Live Notifications</h3>
+                        <div class="notification-list" id="dashboard-notifications">
+                            <div class="notification-item">
+                                <strong>System Online</strong>: Started ADR Quest 2.0 interface. Complete quizzes to unlock credentials.
+                            </div>
+                            <div class="notification-item" style="border-left-color: var(--secondary);">
+                                <strong>Level Up Available</strong>: Gain XP to rise through Clinical ranks.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Admin View: Release Lessons -->
+                    <div id="admin-view-lessons" class="admin-subview" style="display: none;">
+                        <h3>Release Daily Lessons</h3>
+                        <p style="color:var(--text-muted); margin-bottom:1.5rem;">Release daily lesson check-points directly to student dashboards.</p>
+                        
+                        <form id="admin-lesson-form" onsubmit="handleAdminAddLesson(event)" class="glass-card" style="padding:2rem; margin-bottom:2.5rem; background:rgba(255,255,255,0.01);">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label>Release Date (IST)</label>
+                                    <input type="date" id="admin-less-date" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Lesson Title</label>
+                                    <input type="text" id="admin-less-title" class="form-control" placeholder="e.g. Lisinopril Bedside Monitoring" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Short Description</label>
+                                <input type="text" id="admin-less-desc" class="form-control" placeholder="Brief outline of the lesson objective..." required>
+                            </div>
+                            <div class="form-group">
+                                <label>Learning Content (Detailed Medical Text)</label>
+                                <textarea id="admin-less-content" class="form-control" rows="5" placeholder="Deep clinical safety details, drug-drug interactions, pharmacovigilance parameters..." required></textarea>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label>Associated YouTube Link / ID (Optional)</label>
+                                    <input type="text" id="admin-less-videoid" class="form-control" placeholder="e.g. https://www.youtube.com/watch?v=kYJqDCRzV7k or kYJqDCRzV7k">
+                                </div>
+                                <div class="form-group">
+                                    <label>Additional Reference Resources</label>
+                                    <input type="text" id="admin-less-resources" class="form-control" placeholder="e.g. CDSCO Alerts Bulletin 2026, Clinical Notes PDF">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-secondary" style="margin-top:1rem;">Publish Daily Lesson <i class="fa-solid fa-bullhorn"></i></button>
+                        </form>
+
+                        <h4>Active Released Daily Lessons</h4>
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-lessons-rows">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Admin View: Manage Videos -->
+                    <div id="admin-view-videos" class="admin-subview" style="display: none;">
+                        <h3>Manage Learning Videos</h3>
+                        <p style="color:var(--text-muted); margin-bottom:1.5rem;">Register or remove YouTube reference videos for course modules.</p>
+                        
+                        <form id="admin-video-form" onsubmit="handleAdminAddVideo(event)" class="glass-card" style="padding:2rem; margin-bottom:2.5rem; background:rgba(255,255,255,0.01);">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label>Assign to Module</label>
+                                    <select id="admin-vid-module" class="form-control" required>
+                                        <!-- Will populate 12 modules options -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Video Title</label>
+                                    <input type="text" id="admin-vid-title" class="form-control" placeholder="e.g. Heparin Induced Thrombocytopenia Lecture" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>YouTube URL / Video ID</label>
+                                <input type="text" id="admin-vid-url" class="form-control" placeholder="e.g. https://www.youtube.com/watch?v=kYJqDCRzV7k or kYJqDCRzV7k" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Video Description</label>
+                                <input type="text" id="admin-vid-desc" class="form-control" placeholder="Short description of video content...">
+                            </div>
+                            <button type="submit" class="btn btn-secondary" style="margin-top:1rem;">Add Video Reference <i class="fa-solid fa-circle-plus"></i></button>
+                        </form>
+
+                        <h4>Registered Course Videos</h4>
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Module ID</th>
+                                        <th>Title</th>
+                                        <th>YouTube URL / ID</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-videos-rows">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Admin View: Manage Modules -->
+                    <div id="admin-view-modules" class="admin-subview" style="display: none;">
+                        <h3>Configure Learning Modules</h3>
+                        <p style="color:var(--text-muted); margin-bottom:1.5rem;">Modify syllabus details for the 12 core courses without editing the source code.</p>
+                        
+                        <form id="admin-module-form" onsubmit="handleAdminUpdateModule(event)" class="glass-card" style="padding:2rem; background:rgba(255,255,255,0.01);">
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label>Select Module to Edit</label>
+                                    <select id="admin-mod-select" class="form-control" onchange="loadModuleToAdminForm(this.value)" required>
+                                        <!-- Will populate 12 modules options -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Module Title</label>
+                                    <input type="text" id="admin-mod-title" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Module Description</label>
+                                <input type="text" id="admin-mod-desc" class="form-control" required>
+                            </div>
+                            
+                            <h4 style="margin-top:2rem; border-top:1px solid var(--border-color); padding-top:1.5rem;">Edit Lesson 1 Content</h4>
+                            <div class="form-group">
+                                <label>Lesson 1 Title</label>
+                                <input type="text" id="admin-mod-l1-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Lesson 1 Detailed Content</label>
+                                <textarea id="admin-mod-l1-content" class="form-control" rows="4" required></textarea>
+                            </div>
+
+                            <h4 style="margin-top:2rem; border-top:1px solid var(--border-color); padding-top:1.5rem;">Edit Lesson 2 Content</h4>
+                            <div class="form-group">
+                                <label>Lesson 2 Title</label>
+                                <input type="text" id="admin-mod-l2-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Lesson 2 Detailed Content</label>
+                                <textarea id="admin-mod-l2-content" class="form-control" rows="4" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-secondary" style="margin-top:1.5rem;">Update Module Content <i class="fa-solid fa-save"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. LEARNING MODULES VIEW -->
+        <section id="learning" class="view-section">
+            <div class="learning-layout">
+                <!-- Left Sidebar: Modules list -->
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <h3 style="margin-bottom: 1.5rem;">Course Modules</h3>
+                    <ul class="module-nav-list" id="modules-list">
+                        <!-- Populated dynamically via JS -->
+                    </ul>
+                </div>
+
+                <!-- Right Pane: Lesson Viewer -->
+                <div class="glass-card lesson-content-pane">
+                    <div class="lesson-header">
+                        <div class="progress-header">
+                            <span style="font-weight: 700; color: var(--primary);" id="lesson-module-index">MODULE 1 OF 8</span>
+                            <span id="lesson-progress-percent">0% Completed</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fg" id="lesson-progress-bar"></div>
+                        </div>
+                    </div>
+
+                    <div id="lesson-content-area">
+                        <h2 id="lesson-title" style="font-size: 2.2rem; margin-bottom: 1rem;">Lesson Title</h2>
+                        <div class="lesson-body" id="lesson-body">
+                            <!-- Lesson text loaded via JS -->
+                        </div>
+
+                        <!-- Module Quiz Section -->
+                        <div class="quiz-container" id="module-quiz-panel" style="display: none;">
+                            <div style="padding: 1rem; background: rgba(59, 130, 246, 0.05); border-radius: var(--radius-md); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                                <i class="fa-solid fa-clipboard-question" style="color:var(--primary); font-size:1.5rem;"></i>
+                                <div>
+                                    <h4 style="margin:0;">Knowledge Check Quiz</h4>
+                                    <p style="font-size:0.8rem; color:var(--text-muted); margin:0;">Complete this quiz with at least 80% to master this module.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-question-box">
+                                <h4 id="quiz-question-num" style="color:var(--text-muted); font-size:0.875rem; text-transform:uppercase; margin-bottom:0.5rem;">Question 1 of 5</h4>
+                                <p id="quiz-question-text" style="font-size:1.15rem; font-weight:600; margin-bottom:1.25rem;">Question text?</p>
+                                <div class="quiz-options" id="quiz-options-container">
+                                    <!-- Loaded dynamic MCQ items -->
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
+                                <button class="btn btn-outline" id="quiz-prev-btn" onclick="prevQuizQuestion()">Previous</button>
+                                <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuizQuestion()">Next / Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. CLINICAL CASE SIMULATOR VIEW -->
+        <section id="simulator" class="view-section">
+            <div class="simulator-layout">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-heart-pulse" style="color:var(--danger);"></i> Clinical Case Simulator</h2>
+                    <p>Observe the patient, analyze their bedside monitor vitals, and determine the correct pharmacotherapy intervention before critical values drop.</p>
+                </div>
+
+                <div class="glass-card" style="padding: 3rem;">
+                    <!-- Vitals Panel -->
+                    <div class="vital-panel">
+                        <div class="vital-card">
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Heart Rate</div>
+                            <div class="vital-val" id="sim-vital-hr">80 bpm</div>
+                        </div>
+                        <div class="vital-card">
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Blood Pressure</div>
+                            <div class="vital-val" id="sim-vital-bp">120/80 mmHg</div>
+                        </div>
+                        <div class="vital-card">
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Temperature</div>
+                            <div class="vital-val" id="sim-vital-temp">37.0 °C</div>
+                        </div>
+                        <div class="vital-card">
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Oxygen Saturation</div>
+                            <div class="vital-val" id="sim-vital-o2">98%</div>
+                        </div>
+                    </div>
+
+                    <!-- Case Info -->
+                    <div style="margin-bottom: 2rem;">
+                        <span style="font-size: 0.75rem; font-weight:700; color:var(--secondary); text-transform:uppercase;" id="sim-case-category">Cardiovascular Toxicity</span>
+                        <h3 style="font-size: 1.8rem; margin: 0.25rem 0 1rem;" id="sim-case-title">Patient Case 1</h3>
+                        <p id="sim-case-description" style="font-size: 1.1rem; color: var(--text-main);">Case description loaded dynamically...</p>
+                    </div>
+
+                    <!-- Simulator Question / Choices -->
+                    <div style="border-top:1px solid var(--border-color); padding-top:2rem;">
+                        <h4 style="margin-bottom: 1rem; font-size:1.1rem;">Choose your clinical reaction action:</h4>
+                        <div class="quiz-options" id="sim-options">
+                            <!-- Choices populated dynamically -->
+                        </div>
+                        
+                        <!-- Instant Feedback Panel -->
+                        <div id="sim-feedback" style="display:none; margin-top:2rem; padding:1.5rem; border-radius:var(--radius-md);">
+                            <h4 id="sim-feedback-title" style="margin-bottom:0.5rem;">Feedback</h4>
+                            <p id="sim-feedback-desc"></p>
+                            <button class="btn btn-primary btn-sm" id="sim-next-btn" style="margin-top: 1rem;" onclick="loadNextSimulatorCase()">Next Case <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. MINI GAMES HUB VIEW -->
+        <section id="games" class="view-section">
+            <div class="landing-section">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-gamepad" style="color:var(--primary);"></i> Gamified Safety Lab</h2>
+                    <p>Hone your pharmacovigilance skills with interactive clinical games. Earn extra XP to unlock badges.</p>
+                </div>
+
+                <div class="games-hub-grid">
+                    <div class="glass-card game-card">
+                        <div class="game-icon">⚔️</div>
+                        <h3>Quiz Battle</h3>
+                        <p>Rapidly answer pharmacy questions to defeat "Dr. Bot" in a safety face-off.</p>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 1.5rem; width:100%;" onclick="openGame('quiz-battle')">Play Battle</button>
+                    </div>
+
+                    <div class="glass-card game-card">
+                        <div class="game-icon">🔗</div>
+                        <h3>Match the Drug</h3>
+                        <p>Link classic medication agents with their hallmark adverse toxicities.</p>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 1.5rem; width:100%;" onclick="openGame('match-drug')">Play Matching</button>
+                    </div>
+
+                    <div class="glass-card game-card">
+                        <div class="game-icon">⚖️</div>
+                        <h3>True or False</h3>
+                        <p>Test your intuition on drug statistics under rapid-fire conditions.</p>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 1.5rem; width:100%;" onclick="openGame('true-false')">Play True/False</button>
+                    </div>
+
+                    <div class="glass-card game-card">
+                        <div class="game-icon">⏱️</div>
+                        <h3>Time Attack</h3>
+                        <p>Solve safety scenarios against a 60-second ticking clock.</p>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 1.5rem; width:100%;" onclick="openGame('time-attack')">Play Time Attack</button>
+                    </div>
+
+                    <div class="glass-card game-card">
+                        <div class="game-icon">🔍</div>
+                        <h3>ADR Detective</h3>
+                        <p>Examine patient history files to uncover the culprit therapeutic agent.</p>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 1.5rem; width:100%;" onclick="openGame('adr-detective')">Play Detective</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Isolated Game Playing Arena Overlay -->
+            <div id="game-arena-overlay" class="game-arena">
+                <div class="game-arena-card">
+                    <button class="game-close-btn" onclick="closeGameArena()"><i class="fa-solid fa-xmark"></i></button>
+                    <div id="game-arena-content">
+                        <!-- Loaded dynamically based on selected game -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. ADR REPORTING PRACTICE FORM VIEW -->
+        <section id="reporting" class="view-section">
+            <div class="report-form-layout glass-card">
+                <div style="border-bottom:1px solid var(--border-color); padding-bottom:1.5rem; margin-bottom:2.5rem; text-align:center;">
+                    <span style="font-size:0.75rem; font-weight:700; color:var(--primary); text-transform:uppercase;">Pharmacovigilance Lab</span>
+                    <h2 style="font-size:2.2rem; margin-top:0.25rem;">Adverse Reaction Report Form</h2>
+                    <p style="color:var(--text-muted);">Complete all simulated Patient and Therapeutic data fields to practice safety documentation.</p>
+                </div>
+
+                <form id="reporting-practice-form" onsubmit="handleReportFormSubmit(event)" novalidate>
+                    <!-- Section A: Patient Details -->
+                    <h3 style="border-left:4px solid var(--secondary); padding-left:0.5rem; margin-bottom:1.5rem; font-size:1.25rem;">A. Patient Information</h3>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="rep-pat-id">Patient Initials</label>
+                            <input type="text" id="rep-pat-id" class="form-control" placeholder="e.g. J.D." required>
+                            <div class="form-feedback" id="rep-pat-id-err">Initials are required</div>
+                        </div>
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label for="rep-pat-age">Age</label>
+                                <input type="number" id="rep-pat-age" class="form-control" placeholder="e.g. 45" required>
+                                <div class="form-feedback" id="rep-pat-age-err">Age must be a valid number</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="rep-pat-gender">Gender</label>
+                                <select id="rep-pat-gender" class="form-control">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section B: Drug Details -->
+                    <h3 style="border-left:4px solid var(--primary); padding-left:0.5rem; margin:2.5rem 0 1.5rem; font-size:1.25rem;">B. Suspected Therapeutic Product</h3>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="rep-drug-name">Suspected Medication (Generic Name)</label>
+                            <input type="text" id="rep-drug-name" class="form-control" placeholder="e.g. Lisinopril" required>
+                            <div class="form-feedback" id="rep-drug-name-err">Medication name is required</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rep-drug-dose">Dosage & Frequency</label>
+                            <input type="text" id="rep-drug-dose" class="form-control" placeholder="e.g. 10mg daily" required>
+                            <div class="form-feedback" id="rep-drug-dose-err">Dose formulation is required</div>
+                        </div>
+                    </div>
+
+                    <!-- Section C: Adverse Reaction -->
+                    <h3 style="border-left:4px solid var(--danger); padding-left:0.5rem; margin:2.5rem 0 1.5rem; font-size:1.25rem;">C. Adverse Event Details</h3>
+                    <div class="form-group">
+                        <label for="rep-reaction">Adverse Reaction Description</label>
+                        <textarea id="rep-reaction" class="form-control" rows="4" placeholder="Detail clinical toxicity findings, rash characteristics, lab values changes..." required></textarea>
+                        <div class="form-feedback" id="rep-reaction-err">Please describe the reaction event</div>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="rep-onset-date">Reaction Onset Date</label>
+                            <input type="date" id="rep-onset-date" class="form-control" required>
+                            <div class="form-feedback" id="rep-onset-date-err">Choose a valid date</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rep-seriousness">Seriousness Classification</label>
+                            <select id="rep-seriousness" class="form-control">
+                                <option value="Mild Toxicity">Mild Toxicity</option>
+                                <option value="Moderate Severity">Moderate Severity</option>
+                                <option value="Life-threatening / Severe">Life-threatening / Severe</option>
+                                <option value="Hospitalization Induced">Hospitalization Induced</option>
+                                <option value="Congenital Anomaly">Congenital Anomaly</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Submit Reaction Report</button>
+                </form>
+            </div>
+
+            <!-- Report Submission Summary Modal -->
+            <div id="report-summary-modal" class="modal-overlay">
+                <div class="glass-card modal-card">
+                    <h3 style="color:var(--success); margin-bottom:1rem;"><i class="fa-solid fa-circle-check"></i> ADR Practice Form Submitted Successfully!</h3>
+                    <p style="margin-bottom:1.5rem;">Your simulated adverse reaction documentation has been parsed by our safety verification engine.</p>
+                    
+                    <div style="background:var(--background); padding:1.5rem; border-radius:var(--radius-md); font-size:0.875rem; margin-bottom:2rem;">
+                        <p><strong>Report Reference:</strong> <span id="summary-ref-id">ADR-883492</span></p>
+                        <p><strong>Patient Initials:</strong> <span id="summary-pat-id">--</span></p>
+                        <p><strong>Suspected Agent:</strong> <span id="summary-drug">--</span></p>
+                        <p><strong>Adverse Event Severity:</strong> <span id="summary-severity">--</span></p>
+                        <p><strong>Earned XP Reward:</strong> <span style="color:var(--success); font-weight:700;">+100 XP</span></p>
+                    </div>
+
+                    <div style="display:flex; gap:1rem; justify-content:flex-end;">
+                        <button class="btn btn-outline btn-sm" onclick="closeSummaryModal()">Close</button>
+                        <button class="btn btn-primary btn-sm" onclick="navigateTo('dashboard')">Go to Dashboard</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. MY PROGRESS ANALYTICS VIEW -->
+        <section id="progress" class="view-section">
+            <div class="landing-section">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-chart-line" style="color:var(--primary);"></i> My Progress & Analytics</h2>
+                    <p>Review comprehensive statistics and interactive data dashboards tracking your adverse drug reaction training history.</p>
+                </div>
+
+                <div class="charts-grid">
+                    <!-- Chart 1: Module Completion -->
+                    <div class="glass-card chart-wrapper">
+                        <h3>Module Mastery Distribution</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted);">Visualized completion rates across all 8 core safety modules.</p>
+                        <div class="canvas-container">
+                            <canvas id="chart-module-completion" class="progress-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 2: Quiz Accuracy -->
+                    <div class="glass-card chart-wrapper">
+                        <h3>Quiz Score Averages</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted);">Target score percentages compared to safety benchmarks.</p>
+                        <div class="canvas-container">
+                            <canvas id="chart-quiz-accuracy" class="progress-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 3: XP Over Time -->
+                    <div class="glass-card chart-wrapper" style="grid-column: span 2;">
+                        <h3>Clinical XP Training History</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted);">Cumulative XP timeline earned from tasks, games, and case studies.</p>
+                        <div class="canvas-container">
+                            <canvas id="chart-xp-history" class="progress-canvas" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificate Unlock Block -->
+                <div class="glass-card" id="certificate-unlock-card" style="margin-top: 3rem; padding: 2.5rem; text-align: center; border-top: 5px solid var(--accent);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+                    <h3>Safety Professional Certification</h3>
+                    <p style="max-width: 600px; margin: 0.5rem auto 1.5rem; color: var(--text-muted);">Unlock your download certificate of completion once you master all 8 learning modules and achieve 100% curriculum completion.</p>
+                    <div id="cert-status-msg" style="font-weight: 700; color: var(--primary); margin-bottom: 1rem;">Progress: 0 / 8 Modules Done</div>
+                    <button class="btn btn-outline" id="cert-view-btn" disabled onclick="navigateTo('certificate')">View Official Certificate</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. CERTIFICATE VIEW -->
+        <section id="certificate" class="view-section">
+            <div class="certificate-preview-box">
+                <div class="certificate-border">
+                    <h2 class="certificate-title">ADR QUEST</h2>
+                    <p style="font-size: 1.2rem; font-style: italic; margin-bottom: 1.5rem;">Certificate of Clinical Competency</p>
+                    <p style="margin-bottom: 2rem;">This document officially certifies that</p>
+                    
+                    <h1 style="font-size: 3rem; color: var(--primary); font-family: 'Outfit'; margin-bottom: 1.5rem;" id="cert-user-name">DR. GUEST</h1>
+                    
+                    <p style="max-width: 600px; margin: 0 auto 2.5rem;">has successfully completed all requirements, quizzes, simulations, and practice documentation for the safety curriculum</p>
+                    
+                    <h3 style="font-size: 1.5rem; color: var(--secondary); margin-bottom: 3rem;">Pharmacovigilance & Drug Reaction Detection</h3>
+                    
+                    <div class="certificate-badge-gold">🏅</div>
+                    
+                    <div class="certificate-signatures">
+                        <div>
+                            <div class="sig-line">ADR Quest Safety Director</div>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top:0.25rem;">Dr. Emily Vance, PharmD</p>
+                        </div>
+                        <div>
+                            <div class="sig-line">Verification ID</div>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top:0.25rem;" id="cert-verification-id">ADR-QUEST-83749</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;" class="no-print">
+                    <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Download PDF</button>
+                    <button class="btn btn-outline" onclick="navigateTo('dashboard')" style="margin-left: 1rem;">Back to Dashboard</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. LEADERBOARD VIEW -->
+        <section id="leaderboard" class="view-section">
+            <div class="landing-section">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-trophy" style="color:var(--accent);"></i> Global Safety Leaderboard</h2>
+                    <p>Compare clinical pharmacovigilance competency levels and score totals against practitioners globally.</p>
+                </div>
+
+                <div class="leaderboard-tabs">
+                    <button class="btn btn-secondary btn-sm" id="tab-leaderboard-weekly" onclick="filterLeaderboard('weekly')">Weekly</button>
+                    <button class="btn btn-outline btn-sm" id="tab-leaderboard-monthly" onclick="filterLeaderboard('monthly')">Monthly</button>
+                    <button class="btn btn-outline btn-sm" id="tab-leaderboard-alltime" onclick="filterLeaderboard('alltime')">All Time</button>
+                </div>
+
+                <div class="glass-card" style="padding: 2rem;">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th class="leaderboard-rank">Rank</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Level</th>
+                                <th style="text-align: right;">XP Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-rows">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. USER PROFILE VIEW -->
+        <section id="profile" class="view-section">
+            <div class="glass-card profile-grid">
+                <!-- Avatar block -->
+                <div class="avatar-selector">
+                    <div class="avatar-preview" id="profile-avatar-view">👨‍⚕️</div>
+                    <label style="font-weight: 600;">Choose Avatar</label>
+                    <select id="profile-avatar-select" class="form-control" onchange="changeProfileAvatar()">
+                        <option value="👨‍⚕️">Doctor Male</option>
+                        <option value="👩‍⚕️">Doctor Female</option>
+                        <option value="👨‍🔬">Researcher Male</option>
+                        <option value="👩‍🔬">Researcher Female</option>
+                        <option value="🧑">Student</option>
+                    </select>
+                </div>
+
+                <!-- Settings details block -->
+                <div>
+                    <h3 style="margin-bottom: 1.5rem;">Edit Profile & Settings</h3>
+                    <form id="profile-edit-form" onsubmit="handleProfileUpdate(event)">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="profile-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Professional Role</label>
+                            <input type="text" id="profile-role" class="form-control" disabled>
+                        </div>
+                        
+                        <h4 style="margin: 2.5rem 0 1rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">Security Settings</h4>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" id="profile-new-password" class="form-control" placeholder="Leave blank to keep current">
+                        </div>
+                        
+                        <h4 style="margin: 2.5rem 0 1rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">Preferences</h4>
+                        <div class="form-group">
+                            <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                                <input type="checkbox" id="profile-sound-enabled" checked> Enable sound notifications (Simulated)
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem;">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. ADMIN DASHBOARD VIEW -->
+        <section id="admin" class="view-section">
+            <div class="admin-layout">
+                <!-- Sidebar -->
+                <div class="glass-card admin-sidebar">
+                    <h3 style="margin-bottom: 1.5rem;">Admin Terminal</h3>
+                    <div class="admin-menu-item active" id="admin-menu-users" onclick="switchAdminTab('users')"><i class="fa-solid fa-users"></i> Users</div>
+                    <div class="admin-menu-item" id="admin-menu-reports" onclick="switchAdminTab('reports')"><i class="fa-solid fa-file-invoice"></i> Reported Cases</div>
+                    <div class="admin-menu-item" id="admin-menu-lessons" onclick="switchAdminTab('lessons')"><i class="fa-solid fa-bullhorn"></i> Release Lessons</div>
+                    <div class="admin-menu-item" id="admin-menu-videos" onclick="switchAdminTab('videos')"><i class="fa-solid fa-video"></i> Manage Videos</div>
+                    <div class="admin-menu-item" id="admin-menu-modules" onclick="switchAdminTab('modules')"><i class="fa-solid fa-folder-open"></i> Manage Modules</div>
+                    <div class="admin-menu-item" id="admin-menu-analytics" onclick="switchAdminTab('analytics')"><i class="fa-solid fa-chart-pie"></i> Metrics</div>
+                </div>
+
+                <!-- Panel details -->
+                <div class="glass-card" style="padding: 3rem;">
+                    <!-- Admin View: Users -->
+                    <div id="admin-view-users" class="admin-subview">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                            <h3>Platform Users</h3>
+                            <button class="btn btn-outline btn-sm" onclick="exportAdminData('users')"><i class="fa-solid fa-file-export"></i> Export CSV</button>
+                        </div>
+                        <div class="filter-bar">
+                            <input type="text" id="admin-user-search" class="form-control" placeholder="Search by name or email..." oninput="filterAdminUsers()">
+                        </div>
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Level</th>
+                                        <th>XP</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-users-rows">
+                                    <!-- Populated dynamically in script.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Admin View: Reports -->
+                    <div id="admin-view-reports" class="admin-subview" style="display: none;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                            <h3>Reported Adverse Reactions</h3>
+                            <button class="btn btn-outline btn-sm" onclick="exportAdminData('reports')"><i class="fa-solid fa-file-export"></i> Export CSV</button>
+                        </div>
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Ref ID</th>
+                                        <th>Patient</th>
+                                        <th>Drug Suspected</th>
+                                        <th>Reaction</th>
+                                        <th>Severity</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-reports-rows">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Admin View: Analytics -->
+                    <div id="admin-view-analytics" class="admin-subview" style="display: none;">
+                        <h3>System Analytics & Dashboards</h3>
+                        <p style="color:var(--text-muted); margin-bottom:2rem;">System health, user distributions, and report metrics overview.</p>
+                        
+                        <div class="admin-grid-3">
+                            <div class="vital-card">
+                                <h4>Total Users</h4>
+                                <div class="vital-val" style="font-size:2rem;" id="admin-metric-users">8</div>
+                            </div>
+                            <div class="vital-card">
+                                <h4>Active Streak</h4>
+                                <div class="vital-val" style="font-size:2rem; color:var(--primary);" id="admin-metric-streak">4.2d</div>
+                            </div>
+                            <div class="vital-card">
+                                <h4>Total Reports</h4>
+                                <div class="vital-val" style="font-size:2rem; color:var(--accent);" id="admin-metric-reports">14</div>
+                            </div>
+                        </div>
+
+                        <div class="canvas-container" style="height: 300px; margin-top:2rem;">
+                            <canvas id="admin-analytics-canvas" class="progress-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="no-print">
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">
+                    <i class="fa-solid fa-laptop-medical"></i> ADR Quest
+                </div>
+                <p>Ensuring therapeutic safety through structured micro-learning and clinical feedback simulations. Empowering health systems globally.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quests</h4>
+                <ul>
+                    <li><a onclick="navigateTo('learning')">Learning Syllabus</a></li>
+                    <li><a onclick="navigateTo('simulator')">Clinical Cases</a></li>
+                    <li><a onclick="navigateTo('games')">Safety Games</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a onclick="navigateTo('reporting')">Practice Reports</a></li>
+                    <li><a onclick="navigateTo('progress')">User Progress</a></li>
+                    <li><a onclick="navigateTo('leaderboard')">Global Ranks</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Admin</h4>
+                <ul>
+                    <li><a onclick="navigateTo('auth-login')">Staff Sign-In</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ADR Quest. Built for clinical educational presentations and research platforms. Save lives by reporting.</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Support Floating Widget -->
+    <a href="https://wa.me/919999999999?text=Hello%20ADR%20Quest%20Support%2C%20I%27m%20a%20student%20and%20need%20help%20with%20my%20pharmacovigilance%20training." 
+       target="_blank" 
+       class="whatsapp-float no-print" 
+       title="Contact Support on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>WhatsApp Support</span>
+    </a>
+
+    <!-- Global Toast Containers -->
+    <div id="toast-container"></div>
+
+    <!-- Script loading -->
+    <script src="script.js"></script>
+</body>
+</html>

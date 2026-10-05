@@ -1,0 +1,19 @@
+{
+  "name": "adr-quest",
+  "version": "1.0.0",
+  "description": "ADR Quest - Learn. Detect. Report. Save Lives. Gamified medical safety platform.",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "pharmacovigilance",
+    "adr",
+    "education",
+    "simulation",
+    "gamification"
+  ],
+  "author": "ADR Quest Team",
+  "license": "MIT"
+}
